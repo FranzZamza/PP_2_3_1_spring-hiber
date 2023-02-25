@@ -1,7 +1,7 @@
-package app.dao;
+package app.service;
 
 import app.model.User;
 
-public interface UserDao {
+public interface UserService {
     void save(User user);
 }
