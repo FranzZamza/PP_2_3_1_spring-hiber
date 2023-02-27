@@ -18,7 +18,6 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.thymeleaf.spring5.SpringTemplateEngine;
 import org.thymeleaf.spring5.templateresolver.SpringResourceTemplateResolver;
 import org.thymeleaf.spring5.view.ThymeleafViewResolver;
-
 import javax.sql.DataSource;
 import java.util.Objects;
 import java.util.Properties;
@@ -29,8 +28,8 @@ import java.util.Properties;
 @PropertySource("classpath:db.properties")
 @EnableTransactionManagement
 public class AppConfig implements WebMvcConfigurer {
-    private  ApplicationContext applicationContext;
-    private  Environment env;
+    private final ApplicationContext applicationContext;
+    private final Environment env;
 
     @Autowired
     public AppConfig(ApplicationContext applicationContext, Environment env) {
@@ -48,14 +47,12 @@ public class AppConfig implements WebMvcConfigurer {
         dataSource.setPassword(env.getProperty("db.password"));
         return dataSource;
     }
-
     private Properties getHibernateProperties() {
         Properties properties = new Properties();
         properties.put("hibernate.show_sql", env.getRequiredProperty("hibernate.show_sql"));
         properties.put("hibernate.hbm2ddl.auto", env.getRequiredProperty("hibernate.hbm2ddl.auto"));
         return properties;
     }
-
     @Bean
     public LocalContainerEntityManagerFactoryBean getEntityManagerFactoryBean() {
         LocalContainerEntityManagerFactoryBean factoryBean = new LocalContainerEntityManagerFactoryBean();
@@ -65,14 +62,12 @@ public class AppConfig implements WebMvcConfigurer {
         factoryBean.setJpaProperties(getHibernateProperties());
         return factoryBean;
     }
-
     @Bean
     public PlatformTransactionManager getTransactionManager() {
         JpaTransactionManager transactionManager = new JpaTransactionManager();
         transactionManager.setEntityManagerFactory(getEntityManagerFactoryBean().getObject());
         return transactionManager;
     }
-
     //web
     @Bean
     public SpringResourceTemplateResolver templateResolver() {
@@ -82,7 +77,6 @@ public class AppConfig implements WebMvcConfigurer {
         templateResolver.setSuffix(".html");
         return templateResolver;
     }
-
     @Bean
     public SpringTemplateEngine templateEngine() {
         SpringTemplateEngine templateEngine = new SpringTemplateEngine();
@@ -90,8 +84,6 @@ public class AppConfig implements WebMvcConfigurer {
         templateEngine.setEnableSpringELCompiler(true);
         return templateEngine;
     }
-
-
     @Override
     public void configureViewResolvers(ViewResolverRegistry registry) {
         ThymeleafViewResolver resolver = new ThymeleafViewResolver();
